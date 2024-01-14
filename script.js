@@ -20,5 +20,4 @@ function kopyalaMetni(metin) {
     textarea.select();
     document.execCommand("copy");
     document.body.removeChild(textarea);
-    alert("Metin kopyalandı: " + metin);
 }
