@@ -1,30 +1,58 @@
-.modal {
-  display: none;
-  position: fixed; 
-  z-index: 1; 
-  padding-top: 100px; 
-  left: 0;
-  top: 0;
-  width: 100%; 
-  height: 100%; 
-  overflow: auto; 
-  background-color: rgb(0,0,0); 
-  background-color: rgba(0,0,0,0.9); 
+body {
+     background-color: #000000;
+     color: #5b5bfc;
 }
-
-.modal-content {
-  margin: auto;
-  display: block;
-  width: 80%;
-  max-width: 700px;
+ h4 {
+     color: #5d5d87 !important;
 }
-
-.close {
-  position: absolute;
-  top: 15px;
-  right: 35px;
-  color: #f1f1f1;
-  font-size: 40px;
-  font-weight: bold;
-  cursor: pointer;
+ .btn {
+     color: #917474 !important;
+}
+ .rel {
+     color: #282861 !important;
+}
+ #email i {
+     text-decoration: none;
+     float: right;
+     color: #282861 !important;
+}
+ .btn-outline-dark {
+     border-color: #5b5bfc !important;
+}
+ .footer {
+     margin-top: 5% !important;
+     margin-bottom: 10px;
+}
+ @media (max-width: 479px) {
+     .footer {
+         margin-top: 35% !important;
+    }
+}
+ .modal {
+     display: none;
+     position: fixed;
+     z-index: 1;
+     padding-top: 100px;
+     left: 0;
+     top: 0;
+     width: 100%;
+     height: 100%;
+     overflow: auto;
+     background-color: rgb(0,0,0);
+     background-color: rgba(0,0,0,0.9);
+}
+ .modal-content {
+     margin: auto;
+     display: block;
+     width: 80%;
+     max-width: 700px;
+}
+ .close {
+     position: absolute;
+     top: 15px;
+     right: 35px;
+     color: #f1f1f1;
+     font-size: 40px;
+     font-weight: bold;
+     cursor: pointer;
 }
