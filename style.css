@@ -4,7 +4,7 @@ body {
 }
  h4, 
  p {
-     color: #006de6;
+     color: #006de6 !important;
 }
  .btn {
      color: #917474 !important;
