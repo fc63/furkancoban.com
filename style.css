@@ -23,8 +23,11 @@ body {
      border-color: #5b5bfc !important;
 }
  .footer {
-     margin-top: 5% !important;
-     margin-bottom: 10px;
+     border-top: 1px solid #282861;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 20px;
+    font-size: 0.8em;
 }
  @media (max-width: 479px) {
      .footer {
