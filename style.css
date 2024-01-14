@@ -2,8 +2,10 @@ body {
      background-color: #000000;
      color: #5b5bfc;
 }
-h4, 
-p {
+ h4 {
+     color: #006de6
+}
+ p {
      color: #006de6
 }
  .btn {
