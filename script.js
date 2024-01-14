@@ -14,3 +14,11 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
+function kopyalaMetni(metin) {
+    var textarea = document.createElement("textarea");
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+    alert("Metin kopyalandı: " + metin);
+}
