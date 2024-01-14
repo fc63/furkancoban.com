@@ -2,9 +2,6 @@ body {
      background-color: #000000;
      color: #5b5bfc;
 }
- h4 {
-     color: #5d5d87 !important;
-}
  .btn {
      color: #917474 !important;
 }
@@ -14,7 +11,7 @@ body {
  #email i {
      text-decoration: none;
      float: right;
-     color: #282861 !important;
+     color: #917474 !important;
 }
  .btn-outline-dark {
      border-color: #5b5bfc !important;
