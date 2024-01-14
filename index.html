@@ -8,53 +8,18 @@
     <meta name="description" content="Links To My Accounts | Developed By - Furkan Çoban" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
     <title>Furkan Çoban</title>
-    <style>
-      body {
-        background-color: #000000;
-        color: #5b5bfc;
-      }
-
-      h4 {
-        color: #5d5d87 !important;
-      }
-
-      .btn {
-        color: #917474 !important;
-      }
-
-      .rel {
-        color: #282861 !important;
-      }
-
-      #email i {
-        text-decoration: none;
-        float: right;
-        color: #282861 !important;
-      }
-
-      /* Additional styling if needed */
-      .btn-outline-dark {
-        border-color: #5b5bfc !important;
-      }
-
-      /*----------------- Mail-------------------- */
-      .footer {
-        margin-top: 5% !important;
-        margin-bottom: 10px;
-      }
-
-      @media (max-width: 479px) {
-        .footer {
-          margin-top: 35% !important;
-        }
-      }
-    </style>
   </head>
   <body>
     <div class="container">
+      <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="img01">
+        <div id="caption"></div>
+      </div>
+      <img src="fc63.jpg" alt="Küçük resim" width="85px" height="85px" id="myImg">
       <div class="media mt-5">
-        <img src="fc63.jpg" class="m-3" alt="image" width="85px" height="85px">
         <div class="media-body m-2">
           <h4 class="align-items-center mt-2">Furkan Çoban</h4>
           <p>Hello! I am Furkan Çoban. Computer Engineering student based in Çankaya University, Ankara.</p>
@@ -86,5 +51,6 @@
         </div>
       </div>
     </div>
+    <script src="script.js"></script>
   </body>
 </html>
