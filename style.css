@@ -2,9 +2,11 @@ body {
      background-color: #000000;
      color: #5b5bfc;
 }
- h4, 
- p {
+ h4 {
      color: #006de6 !important;
+}
+ p {
+     color: #3898FF !important;
 }
  .btn {
      color: #917474 !important;
