@@ -21,3 +21,7 @@ function kopyalaMetni(metin) {
     document.execCommand("copy");
     document.body.removeChild(textarea);
 }
+window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-M6XHLT45Y3');
