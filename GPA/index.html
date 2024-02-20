@@ -156,16 +156,21 @@
       const actionButtons = document.getElementById('actionButtons');
       actionButtons.innerHTML = `
         
-											
 											<button type="button" id="calculateBtn" class="btn btn-primary mt-2 rounded-3">Hesapla</button>
 											<button type="button" id="resetBtn" class="btn btn-info mt-2 rounded-3">Sıfırla</button>
-      `;
+    `;
       // Hesapla ve Sıfırla butonlarını etkinleştir
       document.getElementById('calculateBtn').disabled = false;
       document.getElementById('resetBtn').disabled = false;
       // Tabloyu ve butonları görünür yap
       document.getElementById('courseTable').style.display = 'table';
       document.getElementById('actionButtons').style.display = 'block';
+      // Genel Not Hesaplama seçiliyse kredi ve GPA girişlerini göster
+      if (document.getElementById('overallCalc').checked) {
+        document.getElementById('creditsGPAInput').style.display = 'block';
+      } else {
+        document.getElementById('creditsGPAInput').style.display = 'none';
+      }
     });
     document.getElementById('actionButtons').addEventListener('click', function(event) {
       if (event.target.id === 'calculateBtn') {
@@ -226,6 +231,7 @@
       let resultHtml = `
     
 											
+											
 											<h3>Sonuçlar</h3>
   `;
       if (overallCalc.checked) {
@@ -234,6 +240,7 @@
         resultHtml += `
       
 											
+											
 											<p>Mevcut Kredi Sayısı: ${currentCredits}</p>
 											<p>Mevcut Ortalama: ${currentGPA.toFixed(2)}</p>
     `;
@@ -241,10 +248,12 @@
       resultHtml += `
     
 											
+											
 											<p>Toplam Kredi Sayısı: ${totalCredits.toFixed(2)}</p>
 											<p>Ağırlıklı Krediler Toplamı: ${totalPoints.toFixed(2)}</p>
 											<p>
 												<b>Genel Ağırlıklı Not Ortalaması: ${gpa.toFixed(2)}
+													
 													
 													<b>
 													</p>
@@ -273,6 +282,7 @@
 		} < /td>< /tr>
 		`).join('')}
         
+															
 															
 															</tbody>
 														</table>
