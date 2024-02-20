@@ -156,6 +156,7 @@
       const actionButtons = document.getElementById('actionButtons');
       actionButtons.innerHTML = `
         
+											
 											<button type="button" id="calculateBtn" class="btn btn-primary mt-2 rounded-3">Hesapla</button>
 											<button type="button" id="resetBtn" class="btn btn-info mt-2 rounded-3">Sıfırla</button>
     `;
@@ -232,6 +233,7 @@
     
 											
 											
+											
 											<h3>Sonuçlar</h3>
   `;
       if (overallCalc.checked) {
@@ -241,53 +243,46 @@
       
 											
 											
+											
 											<p>Mevcut Kredi Sayısı: ${currentCredits}</p>
 											<p>Mevcut Ortalama: ${currentGPA.toFixed(2)}</p>
     `;
       }
       resultHtml += `
     
-											
-											
+											<h3>Sonuçlar</h3>
 											<p>Toplam Kredi Sayısı: ${totalCredits.toFixed(2)}</p>
 											<p>Ağırlıklı Krediler Toplamı: ${totalPoints.toFixed(2)}</p>
 											<p>
-												<b>Genel Ağırlıklı Not Ortalaması: ${gpa.toFixed(2)}
-													
-													
-													<b>
-													</p>
-													<div class="table-responsive border-0 rounded mb-3">
-														<table class="table align-middle p-4 mb-0 table-hover table-shrink">
-															<thead>
-																<tr>
-																	<th scope="col" class="border-0 small">
-																		<b>Ders Adı</b>
-																	</th>
-																	<th scope="col" class="border-0 small">
-																		<b>Kredi</b>
-																	</th>
-																	<th scope="col" class="border-0 small">
-																		<b>Harf Notu</b>
-																	</th>
-																</tr>
-															</thead>
-															<tbody class="border-top-0">
-          ${courses.map(course => ` < tr >< td > $ {
-			course.name
-		} < /td>< td > $ {
-			course.credit
-		} < /td>< td > $ {
-			course.grade
-		} < /td>< /tr>
-		`).join('')}
-        
-															
-															
-															</tbody>
-														</table>
-													</div>
-  `;
+												<b>Genel Ağırlıklı Not Ortalaması: ${gpa.toFixed(2)}</b>
+											</p>
+											<div class="table-responsive border-0 rounded mb-3">
+												<table class="table align-middle p-4 mb-0 table-hover table-shrink">
+													<thead>
+														<tr>
+															<th scope="col" class="border-0 small">
+																<b>Ders Adı</b>
+															</th>
+															<th scope="col" class="border-0 small">
+																<b>Kredi</b>
+															</th>
+															<th scope="col" class="border-0 small">
+																<b>Harf Notu</b>
+															</th>
+														</tr>
+													</thead>
+													<tbody class="border-top-0">
+                ${courses.map(course => `
+														<tr>
+															<td>${course.name}</td>
+															<td>${course.credit}</td>
+															<td>${course.grade}</td>
+														</tr>`).join('')}
+            
+													</tbody>
+												</table>
+											</div>
+`;
       resultTable.innerHTML = resultHtml;
     }
 
