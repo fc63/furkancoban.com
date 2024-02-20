@@ -42,7 +42,7 @@
           <div class="form-check mt-2">
             <input class="form-check-input" type="radio" name="gradeSystem" id="useThirdSystem">
             <label class="form-check-label" for="useThirdSystem">
-              <u>AA, AB, BA, BB, BC, CB, CC, CD, DC, DD, FF</u>
+              <u>AA, AB, BA, BB, BC, CB, CC, CD, DC, DD, &nbsp;FF</u>
             </label>
           </div>
           <div class="form-check mt-2">
@@ -166,6 +166,7 @@
         
 											
 											
+															
 															<button type="button" id="calculateBtn" class="btn btn-primary mt-2 rounded-3">Hesapla</button>
 															<button type="button" id="resetBtn" class="btn btn-info mt-2 rounded-3">Sıfırla</button>
     `;
@@ -244,6 +245,7 @@
 											
 											
 											
+															
 															<h3>Sonuçlar</h3>
   `;
         if (overallCalc.checked) {
@@ -255,6 +257,7 @@
 											
 											
 											
+															
 															<p>Mevcut Kredi Sayısı: ${currentCredits}</p>
 															<p>Mevcut Ortalama: ${currentGPA.toFixed(2)}</p>
     `;
@@ -262,6 +265,7 @@
         resultHtml += `
     
 											
+															
 															<p>Toplam Kredi Sayısı: ${totalCredits.toFixed(2)}</p>
 															<p>Ağırlıklı Krediler Toplamı: ${totalPoints.toFixed(2)}</p>
 															<p>
@@ -285,6 +289,7 @@
 																	<tbody class="border-top-0">
                 ${courses.map(course => `
 														
+																		
 																		<tr>
 																			<td>${course.name}</td>
 																			<td>${course.credit}</td>
@@ -292,6 +297,7 @@
 																		</tr>`).join('')}
             
 													
+																	
 																	</tbody>
 																</table>
 															</div>
