@@ -1,208 +1,251 @@
 <div class="row">
-	<div class="container mt-5">
-		<div class="row mt-5">
-			<h2 class="h3">Üniversite Ortalama Hesaplama - GANO</h2>
-			<div class="col-md-4">
-				<div class="form-check">
-					<input class="form-check-input" type="radio" name="calcType" id="semesterCalc" checked="">
-					<label class="form-check-label" for="semesterCalc"> <b>Dönem Notu Hesaplama</b> </label>
-				</div>
-				<div class="form-check mt-2">
-					<input class="form-check-input" type="radio" name="calcType" id="overallCalc">
-					<label class="form-check-label" for="overallCalc"> <b>Genel Not Hesaplama</b> </label>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-check mt-2">
-					<input class="form-check-input" type="radio" name="gradeSystem" id="firstSystem" checked="">
-					<label class="form-check-label" for="firstSystem"> <u>AA, BA, BB, CB, CC, DC, DD, FD, FF</u> </label>
-				</div>
-				<div class="form-check mt-2">
-					<input class="form-check-input" type="radio" name="gradeSystem" id="useSecondSystem">
-					<label class="form-check-label" for="useSecondSystem"> <u>A1, A2, A3, B1, B2, B3, C1, C2, C3, D, F</u> </label>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-check mt-2">
-					<input class="form-check-input" type="radio" name="gradeSystem" id="useThirdSystem">
-					<label class="form-check-label" for="useThirdSystem"> <u>AA, AB, BA, BB, BC, CB, CC, CD, DC, DD, FF</u> </label>
-				</div>
-				<div class="form-check mt-2">
-					<input class="form-check-input" type="radio" name="gradeSystem" id="useFourthSystem">
-					<label class="form-check-label" for="useFourthSystem"> <u>A, A-, B+, B, B-, C+, C, C-, D+, D, F</u> </label>
-				</div>
-			</div>
-		</div>
-		<form id="gradeForm">
-			<div id="creditsGPAInput" style="display: none;">
-				<div class="col-auto mt-2">
-					<label for="credits">Mevcut Kredi Sayısı:</label>
-					<input type="number" id="credits" name="credits" min="0" step="0.5" max="30" required=""> </div>
-				<div class="col-auto mt-2">
-					<label for="currentGPA">Mevcut Ortalama:</label>
-					<input type="number" id="currentGPA" name="currentGPA" step="0.01" min="0" max="4" required=""> </div>
-			</div>
-			<div class="col-auto mt-2">
-				<label for="numCourses">Ders Sayısı:</label>
-				<input type="number" id="numCourses" name="numCourses" min="1" required="">
-				<button type="button" id="addCoursesBtn" class="btn btn-primary btn-sm mt-2 rounded-3">Ders Ekle</button>
-			</div>
-			<table id="courseTable" class="table mt-4" style="display: none;">
-				<thead>
-					<tr>
-						<th>Ders Adı</th>
-						<th>Kredi</th>
-						<th>Harf Notu</th>
-					</tr>
-				</thead>
-				<tbody></tbody>
-			</table>
-			<div id="actionButtons" class="mt-3" style="display: none;">
-				<button type="button" id="calculateBtn" class="btn btn-success mt-2 rounded-3">Hesapla</button>
-				<button type="button" id="resetBtn" class="btn btn-danger mt-2 rounded-3">Sıfırla</button>
-			</div>
-		</form>
-		<div id="resultTable" class="mt-5"></div>
-	</div>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js" type="text/javascript"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.16/jspdf.plugin.autotable.min.js" type="text/javascript"></script>
-	<script type="text/javascript">
-	let courses = [];
-	document.getElementById('semesterCalc').addEventListener('click', function() {
-		document.getElementById('creditsGPAInput').style.display = 'none';
-	});
-	document.getElementById('overallCalc').addEventListener('click', function() {
-		document.getElementById('creditsGPAInput').style.display = 'block';
-	});
-	document.getElementById('addCoursesBtn').addEventListener('click', function() {
-		const numCourses = parseInt(document.getElementById('numCourses').value);
-		if(numCourses < 1) {
-			alert("En az 1 ders eklemelisiniz.");
-			return;
-		}
-		const courseTableBody = document.querySelector('#courseTable tbody');
-		courseTableBody.innerHTML = ''; // Önceki dersleri temizle
-		for(let i = 0; i < numCourses; i++) {
-			const courseRow = document.createElement('tr');
-			const courseNameCell = document.createElement('td');
-			const courseNameInput = document.createElement('input');
-			courseNameInput.type = 'text';
-			courseNameInput.className = 'form-control form-control-sm';
-			courseNameInput.placeholder = 'Ders Adı';
-			courseNameCell.appendChild(courseNameInput);
-			const creditCell = document.createElement('td');
-			const creditInput = document.createElement('input');
-			creditInput.type = 'number';
-			creditInput.className = 'form-control form-control-sm';
-			creditInput.placeholder = 'Kredi';
-			creditInput.step = '0.5'; // Kredi girişi 0.5 artacak
-			creditCell.appendChild(creditInput);
-			const gradeCell = document.createElement('td');
-			const gradeSelect = document.createElement('select');
-			gradeSelect.className = 'form-control form-control-sm';
-			if(document.getElementById('useSecondSystem').checked) {
-				gradeSelect.innerHTML = ' < option value = "A1" > A1 < /option> < option value = "A2" > A2 < /option> < option value = "A3" > A3 < /option> < option value = "B1" > B1 < /option> < option value = "B2" > B2 < /option> < option value = "B3" > B3 < /option> < option value = "C1" > C1 < /option> < option value = "C2" > C2 < /option> < option value = "C3" > C3 < /option> < option value = "D" > D < /option> < option value = "F" > F < /option>';
-			} else if(document.getElementById('useThirdSystem').checked) {
-				gradeSelect.innerHTML = ' < option value = "AA" > AA < /option> < option value = "AB" > AB < /option> < option value = "BA" > BA < /option> < option value = "BB" > BB < /option> < option value = "BC" > BC < /option> < option value = "CB" > CB < /option> < option value = "CC" > CC < /option> < option value = "CD" > CD < /option> < option value = "DC" > DC < /option> < option value = "DD" > DD < /option> < option value = "FF" > FF < /option>';
-			} else if(document.getElementById('useFourthSystem').checked) {
-				gradeSelect.innerHTML = ' < option value = "A" > A < /option> < option value = "A-" > A - < /option> < option value = "B+" > B + < /option> < option value = "B" > B < /option> < option value = "B-" > B - < /option> < option value = "C+" > C + < /option> < option value = "C" > C < /option> < option value = "C-" > C - < /option> < option value = "D+" > D + < /option> < option value = "D" > D < /option> < option value = "F" > F < /option>';
-			} else {
-				gradeSelect.innerHTML = ' < option value = "AA" > AA < /option> < option value = "BA" > BA < /option> < option value = "BB" > BB < /option> < option value = "CB" > CB < /option> < option value = "CC" > CC < /option> < option value = "DC" > DC < /option> < option value = "DD" > DD < /option> < option value = "FF" > FF < /option>';
-			}
-			gradeCell.appendChild(gradeSelect);
-			courseRow.appendChild(courseNameCell);
-			courseRow.appendChild(creditCell);
-			courseRow.appendChild(gradeCell);
-			courseTableBody.appendChild(courseRow);
-		}
-		const actionButtons = document.getElementById('actionButtons');
-		actionButtons.innerHTML = `
+  <div class="container mt-5">
+    <div class="row mt-5">
+      <h2 class="h3">Üniversite Ortalama Hesaplama - GANO</h2>
+      <div class="col-md-4">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="calcType" id="semesterCalc" checked="">
+          <label class="form-check-label" for="semesterCalc">
+            <b>Dönem Notu Hesaplama</b>
+          </label>
+        </div>
+        <div class="form-check mt-2">
+          <input class="form-check-input" type="radio" name="calcType" id="overallCalc">
+          <label class="form-check-label" for="overallCalc">
+            <b>Genel Not Hesaplama</b>
+          </label>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-check mt-2">
+          <input class="form-check-input" type="radio" name="gradeSystem" id="firstSystem" checked="">
+          <label class="form-check-label" for="firstSystem">
+            <u>AA, BA, BB, CB, CC, DC, DD, FD, FF</u>
+          </label>
+        </div>
+        <div class="form-check mt-2">
+          <input class="form-check-input" type="radio" name="gradeSystem" id="useSecondSystem">
+          <label class="form-check-label" for="useSecondSystem">
+            <u>A1, A2, A3, B1, B2, B3, C1, C2, C3, D, F</u>
+          </label>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-check mt-2">
+          <input class="form-check-input" type="radio" name="gradeSystem" id="useThirdSystem">
+          <label class="form-check-label" for="useThirdSystem">
+            <u>AA, AB, BA, BB, BC, CB, CC, CD, DC, DD, FF</u>
+          </label>
+        </div>
+        <div class="form-check mt-2">
+          <input class="form-check-input" type="radio" name="gradeSystem" id="useFourthSystem">
+          <label class="form-check-label" for="useFourthSystem">
+            <u>A, A-, B+, B, B-, C+, C, C-, D+, D, F</u>
+          </label>
+        </div>
+      </div>
+    </div>
+    <form id="gradeForm">
+      <div id="creditsGPAInput" style="display: none;">
+        <div class="col-auto mt-2">
+          <label for="credits">Mevcut Kredi Sayısı:</label>
+          <input type="number" id="credits" name="credits" min="0" step="0.5" max="30" required="">
+        </div>
+        <div class="col-auto mt-2">
+          <label for="currentGPA">Mevcut Ortalama:</label>
+          <input type="number" id="currentGPA" name="currentGPA" step="0.01" min="0" max="4" required="">
+        </div>
+      </div>
+      <div class="col-auto mt-2">
+        <label for="numCourses">Ders Sayısı:</label>
+        <input type="number" id="numCourses" name="numCourses" min="1" required="">
+        <button type="button" id="addCoursesBtn" class="btn btn-primary btn-sm mt-2 rounded-3">Ders Ekle</button>
+      </div>
+      <table id="courseTable" class="table mt-4" style="display: none;">
+        <thead>
+          <tr>
+            <th>Ders Adı</th>
+            <th>Kredi</th>
+            <th>Harf Notu</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div id="actionButtons" class="mt-3" style="display: none;">
+        <button type="button" id="calculateBtn" class="btn btn-success mt-2 rounded-3">Hesapla</button>
+        <button type="button" id="resetBtn" class="btn btn-danger mt-2 rounded-3">Sıfırla</button>
+      </div>
+    </form>
+    <div id="resultTable" class="mt-5"></div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js" type="text/javascript"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.16/jspdf.plugin.autotable.min.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    let courses = [];
+    document.getElementById('semesterCalc').addEventListener('click', function() {
+      document.getElementById('creditsGPAInput').style.display = 'none';
+    });
+    document.getElementById('overallCalc').addEventListener('click', function() {
+      document.getElementById('creditsGPAInput').style.display = 'block';
+    });
+    document.getElementById('addCoursesBtn').addEventListener('click', function() {
+      const numCourses = parseInt(document.getElementById('numCourses').value);
+      if (numCourses < 1) {
+        alert("En az 1 ders eklemelisiniz.");
+        return;
+      }
+      const courseTableBody = document.querySelector('#courseTable tbody');
+      courseTableBody.innerHTML = ''; // Önceki dersleri temizle
+      for (let i = 0; i < numCourses; i++) {
+        const courseRow = document.createElement('tr');
+        const courseNameCell = document.createElement('td');
+        const courseNameInput = document.createElement('input');
+        courseNameInput.type = 'text';
+        courseNameInput.className = 'form-control form-control-sm';
+        courseNameInput.placeholder = 'Ders Adı';
+        courseNameCell.appendChild(courseNameInput);
+        const creditCell = document.createElement('td');
+        const creditInput = document.createElement('input');
+        creditInput.type = 'number';
+        creditInput.className = 'form-control form-control-sm';
+        creditInput.placeholder = 'Kredi';
+        creditInput.step = '0.5'; // Kredi girişi 0.5 artacak
+        creditCell.appendChild(creditInput);
+        const gradeCell = document.createElement('td');
+        const gradeSelect = document.createElement('select');
+        gradeSelect.className = 'form-control form-control-sm';
+        if (document.getElementById('useSecondSystem').checked) {
+          const gradeOptions = ["A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3", "D", "F"];
+          for (const optionValue of gradeOptions) {
+            const option = document.createElement('option');
+            option.value = optionValue;
+            option.text = optionValue;
+            gradeSelect.appendChild(option);
+          }
+        } else if (document.getElementById('useThirdSystem').checked) {
+          const gradeOptions = ["AA", "AB", "BA", "BB", "BC", "CB", "CC", "CD", "DC", "DD", "FF"];
+          for (const optionValue of gradeOptions) {
+            const option = document.createElement('option');
+            option.value = optionValue;
+            option.text = optionValue;
+            gradeSelect.appendChild(option);
+          }
+        } else if (document.getElementById('useFourthSystem').checked) {
+          const gradeOptions = ["A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "F"];
+          for (const optionValue of gradeOptions) {
+            const option = document.createElement('option');
+            option.value = optionValue;
+            option.text = optionValue;
+            gradeSelect.appendChild(option);
+          }
+        } else {
+          const gradeOptions = ["AA", "BA", "BB", "CB", "CC", "DC", "DD", "FF"];
+          for (const optionValue of gradeOptions) {
+            const option = document.createElement('option');
+            option.value = optionValue;
+            option.text = optionValue;
+            gradeSelect.appendChild(option);
+          }
+        }
+        gradeCell.appendChild(gradeSelect);
+        courseRow.appendChild(courseNameCell);
+        courseRow.appendChild(creditCell);
+        courseRow.appendChild(gradeCell);
+        courseTableBody.appendChild(courseRow);
+      }
+      const actionButtons = document.getElementById('actionButtons');
+      actionButtons.innerHTML = `
         
+											
 											<button type="button" id="calculateBtn" class="btn btn-primary mt-2 rounded-3">Hesapla</button>
 											<button type="button" id="resetBtn" class="btn btn-info mt-2 rounded-3">Sıfırla</button>
       `;
-		// Hesapla ve Sıfırla butonlarını etkinleştir
-		document.getElementById('calculateBtn').disabled = false;
-		document.getElementById('resetBtn').disabled = false;
-		// Tabloyu ve butonları görünür yap
-		document.getElementById('courseTable').style.display = 'table';
-		document.getElementById('actionButtons').style.display = 'block';
-	});
-	document.getElementById('actionButtons').addEventListener('click', function(event) {
-		if(event.target.id === 'calculateBtn') {
-			calculateGrades();
-		} else if(event.target.id === 'resetBtn') {
-			resetForm();
-		}
-	});
+      // Hesapla ve Sıfırla butonlarını etkinleştir
+      document.getElementById('calculateBtn').disabled = false;
+      document.getElementById('resetBtn').disabled = false;
+      // Tabloyu ve butonları görünür yap
+      document.getElementById('courseTable').style.display = 'table';
+      document.getElementById('actionButtons').style.display = 'block';
+    });
+    document.getElementById('actionButtons').addEventListener('click', function(event) {
+      if (event.target.id === 'calculateBtn') {
+        calculateGrades();
+      } else if (event.target.id === 'resetBtn') {
+        resetForm();
+      }
+    });
 
-	function resetForm() {
-		courses = [];
-		const courseTableBody = document.querySelector('#courseTable tbody');
-		courseTableBody.innerHTML = '';
-		document.getElementById('numCourses').value = '';
-		document.getElementById('credits').value = '';
-		document.getElementById('currentGPA').value = '';
-		document.getElementById('resultTable').innerHTML = '';
-		// Hesapla ve Sıfırla butonlarını devre dışı bırak
-		document.getElementById('calculateBtn').disabled = true;
-		document.getElementById('resetBtn').disabled = true;
-		// Tabloyu ve butonları gizle
-		document.getElementById('courseTable').style.display = 'none';
-		document.getElementById('actionButtons').style.display = 'none';
-	}
+    function resetForm() {
+      courses = [];
+      const courseTableBody = document.querySelector('#courseTable tbody');
+      courseTableBody.innerHTML = '';
+      document.getElementById('numCourses').value = '';
+      document.getElementById('credits').value = '';
+      document.getElementById('currentGPA').value = '';
+      document.getElementById('resultTable').innerHTML = '';
+      // Hesapla ve Sıfırla butonlarını devre dışı bırak
+      document.getElementById('calculateBtn').disabled = true;
+      document.getElementById('resetBtn').disabled = true;
+      // Tabloyu ve butonları gizle
+      document.getElementById('courseTable').style.display = 'none';
+      document.getElementById('actionButtons').style.display = 'none';
+    }
 
-	function calculateGrades() {
-		courses = [];
-		const courseRows = document.querySelectorAll('#courseTable tbody tr');
-		courseRows.forEach(row => {
-			const courseName = row.querySelector('td:nth-child(1) input').value;
-			const credit = parseFloat(row.querySelector('td:nth-child(2) input').value);
-			const grade = row.querySelector('td:nth-child(3) select').value;
-			courses.push({
-				name: courseName,
-				credit: credit,
-				grade: grade
-			});
-		});
-		let totalCredits = 0;
-		let totalPoints = 0;
-		const useSecondSystem = document.getElementById('useSecondSystem').checked;
-		const useThirdSystem = document.getElementById('useThirdSystem').checked;
-		const useFourthSystem = document.getElementById('useFourthSystem').checked;
-		courses.forEach(course => {
-			totalCredits += course.credit;
-			totalPoints += calculateGradePoints(course.grade, useThirdSystem, useSecondSystem, useFourthSystem) * course.credit;
-		});
-		let gpa = totalPoints / totalCredits;
-		const overallCalc = document.getElementById('overallCalc');
-		if(overallCalc.checked) {
-			const credits = parseFloat(document.getElementById('credits').value);
-			const currentGPA = parseFloat(document.getElementById('currentGPA').value);
-			totalCredits += credits;
-			totalPoints += currentGPA * credits;
-			gpa = totalPoints / totalCredits;
-		}
-		const resultTable = document.getElementById('resultTable');
-		let resultHtml = `
+    function calculateGrades() {
+      courses = [];
+      const courseRows = document.querySelectorAll('#courseTable tbody tr');
+      courseRows.forEach(row => {
+        const courseName = row.querySelector('td:nth-child(1) input').value;
+        const credit = parseFloat(row.querySelector('td:nth-child(2) input').value);
+        const grade = row.querySelector('td:nth-child(3) select').value;
+        courses.push({
+          name: courseName,
+          credit: credit,
+          grade: grade
+        });
+      });
+      let totalCredits = 0;
+      let totalPoints = 0;
+      const useSecondSystem = document.getElementById('useSecondSystem').checked;
+      const useThirdSystem = document.getElementById('useThirdSystem').checked;
+      const useFourthSystem = document.getElementById('useFourthSystem').checked;
+      courses.forEach(course => {
+        totalCredits += course.credit;
+        totalPoints += calculateGradePoints(course.grade, useThirdSystem, useSecondSystem, useFourthSystem) * course.credit;
+      });
+      let gpa = totalPoints / totalCredits;
+      const overallCalc = document.getElementById('overallCalc');
+      if (overallCalc.checked) {
+        const credits = parseFloat(document.getElementById('credits').value);
+        const currentGPA = parseFloat(document.getElementById('currentGPA').value);
+        totalCredits += credits;
+        totalPoints += currentGPA * credits;
+        gpa = totalPoints / totalCredits;
+      }
+      const resultTable = document.getElementById('resultTable');
+      let resultHtml = `
     
+											
 											<h3>Sonuçlar</h3>
   `;
-		if(overallCalc.checked) {
-			const currentCredits = parseFloat(document.getElementById('credits').value);
-			const currentGPA = parseFloat(document.getElementById('currentGPA').value);
-			resultHtml += `
+      if (overallCalc.checked) {
+        const currentCredits = parseFloat(document.getElementById('credits').value);
+        const currentGPA = parseFloat(document.getElementById('currentGPA').value);
+        resultHtml += `
       
+											
 											<p>Mevcut Kredi Sayısı: ${currentCredits}</p>
 											<p>Mevcut Ortalama: ${currentGPA.toFixed(2)}</p>
     `;
-		}
-		resultHtml += `
+      }
+      resultHtml += `
     
+											
 											<p>Toplam Kredi Sayısı: ${totalCredits.toFixed(2)}</p>
 											<p>Ağırlıklı Krediler Toplamı: ${totalPoints.toFixed(2)}</p>
 											<p>
 												<b>Genel Ağırlıklı Not Ortalaması: ${gpa.toFixed(2)}
+													
 													<b>
 													</p>
 													<div class="table-responsive border-0 rounded mb-3">
@@ -221,127 +264,128 @@
 																</tr>
 															</thead>
 															<tbody class="border-top-0">
-          ${courses.map(course => ` < tr > < td > $ {
+          ${courses.map(course => ` < tr >< td > $ {
 			course.name
-		} < /td> < td > $ {
+		} < /td>< td > $ {
 			course.credit
-		} < /td> < td > $ {
+		} < /td>< td > $ {
 			course.grade
-		} < /td> < /tr>
+		} < /td>< /tr>
 		`).join('')}
         
+															
 															</tbody>
 														</table>
 													</div>
   `;
-		resultTable.innerHTML = resultHtml;
-	}
+      resultTable.innerHTML = resultHtml;
+    }
 
-	function calculateGradePoints(grade, useThirdSystem, useSecondSystem, useFourthSystem) {
-		if(useThirdSystem) {
-			switch(grade) {
-				case 'AA':
-					return 4.00;
-				case 'AB':
-					return 3.70;
-				case 'BA':
-					return 3.30;
-				case 'BB':
-					return 3.00;
-				case 'BC':
-					return 2.70;
-				case 'CB':
-					return 2.30;
-				case 'CC':
-					return 2.00;
-				case 'CD':
-					return 1.70;
-				case 'DC':
-					return 1.30;
-				case 'DD':
-					return 1.00;
-				case 'FF':
-					return 0.00;
-				default:
-					return 0.00;
-			}
-		} else if(useFourthSystem) {
-			switch(grade) {
-				case 'A':
-					return 4.00;
-				case 'A-':
-					return 3.70;
-				case 'B+':
-					return 3.30;
-				case 'B':
-					return 3.00;
-				case 'B-':
-					return 2.70;
-				case 'C+':
-					return 2.30;
-				case 'C':
-					return 2.00;
-				case 'C-':
-					return 1.70;
-				case 'D+':
-					return 1.30;
-				case 'D':
-					return 1.00;
-				case 'F':
-					return 0.00;
-				default:
-					return 0.00;
-			}
-		} else if(useSecondSystem) {
-			switch(grade) {
-				case 'A1':
-					return 4.00;
-				case 'A2':
-					return 3.75;
-				case 'A3':
-					return 3.50;
-				case 'B1':
-					return 3.25;
-				case 'B2':
-					return 3.00;
-				case 'B3':
-					return 2.75;
-				case 'C1':
-					return 2.50;
-				case 'C2':
-					return 2.25;
-				case 'C3':
-					return 2.00;
-				case 'D':
-					return 1.75;
-				case 'F':
-					return 0.00;
-				default:
-					return 0.00;
-			}
-		} else {
-			switch(grade) {
-				case 'AA':
-					return 4.00;
-				case 'BA':
-					return 3.50;
-				case 'BB':
-					return 3.00;
-				case 'CB':
-					return 2.50;
-				case 'CC':
-					return 2.00;
-				case 'DC':
-					return 1.50;
-				case 'DD':
-					return 1.00;
-				case 'FF':
-					return 0.00;
-				default:
-					return 0.00;
-			}
-		}
-	}
-	</script>
-	<section class="pb-0 pb-lg-5 mt-3 mb-3">
+    function calculateGradePoints(grade, useThirdSystem, useSecondSystem, useFourthSystem) {
+      if (useThirdSystem) {
+        switch (grade) {
+          case 'AA':
+            return 4.00;
+          case 'AB':
+            return 3.70;
+          case 'BA':
+            return 3.30;
+          case 'BB':
+            return 3.00;
+          case 'BC':
+            return 2.70;
+          case 'CB':
+            return 2.30;
+          case 'CC':
+            return 2.00;
+          case 'CD':
+            return 1.70;
+          case 'DC':
+            return 1.30;
+          case 'DD':
+            return 1.00;
+          case 'FF':
+            return 0.00;
+          default:
+            return 0.00;
+        }
+      } else if (useFourthSystem) {
+        switch (grade) {
+          case 'A':
+            return 4.00;
+          case 'A-':
+            return 3.70;
+          case 'B+':
+            return 3.30;
+          case 'B':
+            return 3.00;
+          case 'B-':
+            return 2.70;
+          case 'C+':
+            return 2.30;
+          case 'C':
+            return 2.00;
+          case 'C-':
+            return 1.70;
+          case 'D+':
+            return 1.30;
+          case 'D':
+            return 1.00;
+          case 'F':
+            return 0.00;
+          default:
+            return 0.00;
+        }
+      } else if (useSecondSystem) {
+        switch (grade) {
+          case 'A1':
+            return 4.00;
+          case 'A2':
+            return 3.75;
+          case 'A3':
+            return 3.50;
+          case 'B1':
+            return 3.25;
+          case 'B2':
+            return 3.00;
+          case 'B3':
+            return 2.75;
+          case 'C1':
+            return 2.50;
+          case 'C2':
+            return 2.25;
+          case 'C3':
+            return 2.00;
+          case 'D':
+            return 1.75;
+          case 'F':
+            return 0.00;
+          default:
+            return 0.00;
+        }
+      } else {
+        switch (grade) {
+          case 'AA':
+            return 4.00;
+          case 'BA':
+            return 3.50;
+          case 'BB':
+            return 3.00;
+          case 'CB':
+            return 2.50;
+          case 'CC':
+            return 2.00;
+          case 'DC':
+            return 1.50;
+          case 'DD':
+            return 1.00;
+          case 'FF':
+            return 0.00;
+          default:
+            return 0.00;
+        }
+      }
+    }
+  </script>
+  <section class="pb-0 pb-lg-5 mt-3 mb-3">
 </div>
