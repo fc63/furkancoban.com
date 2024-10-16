@@ -1,0 +1,89 @@
+<html ng-app="RemComApp">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="RCA for C++, PHP, JavaScript, Python, HTML, Java, CSS, SQL, MATLAB, RUBY, SWift!">
+    <meta name="author" content="">
+
+    <title>Remove Comments Application</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="script.js"></script>
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container" style="padding-left:0;">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="https://furkancoban.com/RCA"><span style="font-size:22px; font-weight:bold; color:000000;">RCA</span><span class="hidden-xs"> - A Comment Remover For Almost Any Language</span></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" ng-controller="RemComController as RemCom">
+        <form ng-submit="RemCom.split()">
+            <div class="row well well-sm">
+                <div class="row">
+                    <div class="col-md-2 col-sm-3">
+                        <div class="form-group">
+                            <div class="checkbox-inline"><label><input type="checkbox" ng-model="RemCom.comcheck">Line Comment</label></div>
+                            <input id="cominput" type="text" class="form-control field" ng-model="RemCom.comment" ng-disabled="!RemCom.comcheck" placeholder="Ex: //">
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-3">
+                        <div class="form-group">
+                            <div class="checkbox-inline"><label><input type="checkbox" ng-model="RemCom.esccheck">Escape Symbol</label></div>
+                            <input id="escinput" type="text" class="form-control field" ng-model="RemCom.esc" ng-disabled="!RemCom.esccheck" placeholder="Ex: \">
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-3">
+                        <div class="form-group">
+                            <div class="checkbox-inline"><label><input type="checkbox" ng-model="RemCom.bccheck">Block Comment</label></div>
+                            <div id="bcinput" class="input-group">
+                                <input type="text" class="form-control bcfield" ng-model="RemCom.bcopen" ng-disabled="!RemCom.bccheck" placeholder="Ex: /*">
+                                <span class="input-group-addon"></span>
+                                <input type="text" class="form-control bcfield" ng-model="RemCom.bcclose" ng-disabled="!RemCom.bccheck" placeholder="Ex: */">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-3 col-md-offset-3">
+                        <div class="form-group">
+                            <input class="btn btn-info" style="font-family:Arial; background:#377d94; margin-top:26px;" type="submit" value="Remove">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <p>
+                        <strong>Presets: </strong>
+                        <a href="" ng-click="RemCom.getPreset('main')">C/C++/C#</a> •
+                        <a href="" ng-click="RemCom.getPreset('main')">PHP</a> •
+                        <a href="" ng-click="RemCom.getPreset('main')">Java</a> •
+                        <a href="" ng-click="RemCom.getPreset('main')">JavaScript</a> •
+                        <a href="" ng-click="RemCom.getPreset('python')">Python</a> •
+                        <a href="" ng-click="RemCom.getPreset('html')">HTML</a> •
+                        <a href="" ng-click="RemCom.getPreset('css')">CSS</a> •
+                        <a href="" ng-click="RemCom.getPreset('sql')">SQL</a> •
+                        <a href="" ng-click="RemCom.getPreset('matlab')">MATLAB</a> •
+                        <a href="" ng-click="RemCom.getPreset('ruby')">Ruby</a> •
+                        <a href="" ng-click="RemCom.getPreset('main')">Swift</a>
+                    </p>
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" id="apptext" ng-model="RemCom.appText" rows="10" placeholder="Paste your code here"></textarea>
+        </form>
+        </div>
+
+</body>
+
+</html>
