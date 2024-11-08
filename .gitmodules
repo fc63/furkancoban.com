@@ -1,0 +1,3 @@
+[submodule "Blog"]
+	path = Blog
+	url = https://github.com/fc63/Blog.git
