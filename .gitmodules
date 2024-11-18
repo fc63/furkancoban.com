@@ -1,0 +1,3 @@
+[submodule "MiniMax"]
+	path = MiniMax
+	url = https://github.com/fc63/MiniMax
